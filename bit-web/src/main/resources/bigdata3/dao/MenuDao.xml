@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bigdata3.dao.MenuDao">
+  <resultMap type="menu" id="menuMap">
+    <id column="mno" property="menuNo"/>
+    <result column="mtype" property="menuType"/>
+    <result column="mname" property="menuName"/>
+    <result column="mprice" property="menuPrice"/>
+    <result column="mcontent" property="menuContent"/>
+    <result column="mdate" property="createDate"/>
+    <result column="delchk" property="deleteCheck"/>
+    <result column="manager" property="manager"/> 
+    <association property="menuImage" javaType="upload">
+        <result column="filename" property="fileName"/>
+    </association>
+  </resultMap>
+  
+  <select id="list" resultMap="menuMap" parameterType="map">
+    select m.mno, m.mname, m.mprice, m.mcontent, m.mdate, m.delchk, m.manager, mc.mtype, mi.filename
+    from menu m left join menu_category mc
+    on m.mcno = mc.mcno
+    left join menu_image mi
+    on m.mno = mi.mno
+    order by m.mno 
+    limit #{startIndex}, #{pageSize}
+  </select>
+  
+  <select id="noneSize" resultMap="menuMap">
+    select m.mno, m.mname, m.mprice, m.mcontent, m.mdate, m.delchk, m.manager, mc.mtype, mi.filename
+    from menu m left join menu_category mc
+    on m.mcno = mc.mcno
+    left join menu_image mi
+    on m.mno = mi.mno
+    order by m.mno 
+  </select>
+  
+  <select id="selectByType" resultMap="menuMap" parameterType="map">
+    select m.mno, m.mname, m.mprice, m.mcontent, m.mdate, m.manager, m.delchk, mc.mtype
+    from menu m left join menu_category mc
+    on m.mcno = mc.mcno
+    where mc.mtype = #{menuType}
+  </select>
+  
+  <select id="count" resultType="int">
+    select count(*) from menu
+  </select>
+  
+  <insert id="insert" parameterType="menu" useGeneratedKeys="true" keyColumn="mno" keyProperty="menuNo">
+    insert into menu(mcno, mname, mprice, mcontent, mdate, delchk, manager)
+    values(#{menuType}, #{menuName}, #{menuPrice}, #{menuContent}, now(), default, #{manager})
+  </insert>
+  
+  <update id="update" parameterType="menu">
+    update menu
+    set
+    mname = #{menuName},
+    mprice = #{menuPrice},
+    mcontent = #{menuContent},
+    mdate = #{createDate}
+    where mno = #{menuNo}
+  </update>
+  
+  <update id="delete" parameterType="int">
+    update menu
+    set
+    delchk = 'Y'
+    where mno = #{menuNo}
+  </update>
+
+</mapper>

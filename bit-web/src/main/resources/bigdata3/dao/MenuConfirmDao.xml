@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bigdata3.dao.MenuConfirmDao">
+  <resultMap type="menuConfirm" id="menuConfirmMap">
+    <id column="mtcno" property="menuTempNo"/>
+    <result column="bname" property="branchName"/>
+    <result column="mttype" property="menuTempType"/>
+    <result column="mtarea" property="menuArea"/>
+    <result column="mname" property="menuName"/>
+    <result column="mtype" property="menuType"/>
+    <result column="mprice" property="menuPrice"/>
+    <result column="mcontent" property="menuContent"/>
+    <result column="mtdate" property="createDate"/>
+    <result column="delchk" property="deleteCheck"/>
+  </resultMap>
+  
+  <select id="confirmList" resultMap="menuConfirmMap">
+    select mtcno, mttype, mtarea, mname, mtype, mprice, mcontent, mtdate, delchk, bname
+    from menu_confirm
+    order by mtcno 
+  </select>
+  
+  <select id="selectByTempNo" resultMap="menuConfirmMap" parameterType="int">
+    select mtcno, mttype, mtarea, mname, mtype, mprice, mcontent, mtdate, delchk, bname
+    from menu_confirm
+    order by mtcno 
+    where mtcno = #{menuTempNo}
+  </select>
+  
+  <update id="update" parameterType="int">
+    update menu_confirm set
+    delchk = 'Y'
+    where mtcno = #{menuTempNo}  
+  </update>
+  
+</mapper>

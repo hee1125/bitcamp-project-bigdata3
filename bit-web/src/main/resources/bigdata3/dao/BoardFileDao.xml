@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bigdata3.dao.BoardFileDao">
+	<resultMap type="upload" id="muploadMap">
+		<id column="bfno" property="uploadNo" />
+		<result column="bdno" property="boardNo" />
+		<result column="filename" property="fileName" />
+		<result column="newfilename" property="newFileName" />
+		<result column="bfdate" property="uploadDate" />
+	</resultMap>
+    
+	<insert id="insert" parameterType="map" useGeneratedKeys="true" keyColumn="bfno" keyProperty="uploadNo">
+		INSERT INTO board_file(bdno,filename,newfilename,bfdate)
+		  VALUES(#{boardNo},#{fileName},#{newFileName},now()) 
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from board_file
+		where bdno=#{boardNo}
+	</delete>
+
+</mapper>

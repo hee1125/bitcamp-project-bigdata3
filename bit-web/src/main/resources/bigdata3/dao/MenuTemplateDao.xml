@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bigdata3.dao.MenuTemplateDao">
+  <resultMap type="menuTemplate" id="menuTemplateMap">
+    <id column="mtno" property="menuTempNo"/>
+    <result column="bname" property="branchName"/>
+    <result column="mttype" property="menuTempType"/>
+    <result column="mtarea" property="menuArea"/>
+    <result column="mname" property="menuName"/>
+    <result column="mtype" property="menuType"/>
+    <result column="mprice" property="menuPrice"/>
+    <result column="mcontent" property="menuContent"/>
+    <result column="mtdate" property="createDate"/>
+    <result column="delchk" property="deleteCheck"/>
+  </resultMap>
+  
+  <select id="list" resultMap="menuTemplateMap" parameterType="map">
+    select mt.mtno, mt.mttype, mt.mtarea, mt.mname, mt.mtype, mt.mprice, mt.mcontent, mt.mtdate, mt.delchk, b.bname
+    from menu_temp mt left join branch b
+    on mt.bno = b.bno
+    order by mt.mtno 
+    limit #{startIndex}, #{pageSize}
+  </select>
+  
+  <select id="menuboard" resultMap="menuTemplateMap">
+    select mt.mtno, mt.mttype, mt.mtarea, mt.mname, mt.mtype, mt.mprice, mt.mcontent, mt.mtdate, mt.delchk, b.bname
+    from menu_temp mt left join branch b
+    on mt.bno = b.bno
+    order by mt.mtno 
+  </select>
+  
+  <select id="count" resultType="int">
+    select count(*) from menu_temp
+  </select>
+  
+  <insert id="insert" parameterType="menu" useGeneratedKeys="true" keyColumn="mtno" keyProperty="menuTempNo">
+    insert into menu_temp(bno,mttype, mtarea, mname, mtype, mprice, mcontent, mtdate, delchk)
+    values(#{branchNo},#{menuTempType}, #{menuArea}, #{menuName}, #{menuType}, #{menuPrice}, #{menuContent}, now(), default)
+  </insert>
+  
+  <insert id="sendRequest" parameterType="menu" useGeneratedKeys="true" keyColumn="mtno" keyProperty="menuTempNo">
+    insert into menu_confirm(bname,mttype, mtarea, mname, mtype, mprice, mcontent, mtdate, delchk)
+    values(#{branchName},#{menuTempType}, #{menuArea}, #{menuName}, #{menuType}, #{menuPrice}, #{menuContent}, now(), default)
+  </insert>
+  
+  <update id="update" parameterType="menu">
+    update menu
+    set
+    mname = #{menuName},
+    mprice = #{menuPrice},
+    mcontent = #{menuContent},
+    mdate = #{createDate}
+    where mtarea = #{menuArea}
+  </update>
+  
+  <update id="delete" parameterType="int">
+    update menu_temp
+    set
+    delchk = 'Y'
+    where mtno = #{menuTempNo}
+  </update>
+
+</mapper>

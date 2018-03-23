@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bigdata3.dao.MenuFileDao">
+	<resultMap type="upload" id="muploadMap">
+		<id column="mino" property="uploadNo" />
+		<result column="mno" property="templateManagerNo" />
+		<result column="filename" property="fileName" />
+		<result column="newfilename" property="newFileName" />
+		<result column="midate" property="uploadDate" />
+	</resultMap>
+    
+	<insert id="insert" parameterType="map" useGeneratedKeys="true" keyColumn="tpmno" keyProperty="uploadNo">
+		INSERT INTO menu_image(mno,filename,newfilename,midate)
+		  VALUES(#{menuNo},#{fileName},#{newFileName},now()) 
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from menu_image
+		where mno=#{menuNo}
+	</delete>
+
+</mapper>
